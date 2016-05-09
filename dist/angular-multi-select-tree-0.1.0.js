@@ -234,6 +234,7 @@
         switchViewCallback: '&',
         selectOnlyLeafs: '=?',
         callback: '&',
+        showField: '@',
         defaultLabel: '@'
       },
       link: function (scope, element, attrs) {
@@ -258,7 +259,7 @@
         function isChildrenFiltered(item, keyword) {
           var childNodes = getAllChildNodesFromNode(item, []);
           for (var i = 0, len = childNodes.length; i < len; i++) {
-            if (childNodes[i].name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
+            if (childNodes[i][scope.showField].toLowerCase().indexOf(keyword.toLowerCase()) !== -1) {
               return false;
             }
           }
@@ -278,7 +279,8 @@
         scope.$watch('filterKeyword', function () {
           if (scope.filterKeyword !== undefined) {
             angular.forEach(scope.inputModel, function (item) {
-              if (item.name.toLowerCase().indexOf(scope.filterKeyword.toLowerCase()) !== -1) {
+              console.log(item[scope.showField]);
+              if (item[scope.showField].toLowerCase().indexOf(scope.filterKeyword.toLowerCase()) !== -1) {
                 item.isFiltered = false;
               } else if (!isChildrenFiltered(item, scope.filterKeyword)) {
                 item.isFiltered = false;
@@ -407,7 +409,8 @@
           selectOnlyLeafs: '=?',
           isActive: '=',
           useCallback: '=',
-          canSelectItem: '='
+          canSelectItem: '=',
+          showField: '@'
         },
         controller: 'treeItemCtrl',
         compile: function (element, attrs, link) {
